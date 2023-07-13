@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Library Management System - Book List</title>
+  <style>
+    /* Add your custom CSS styles here */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9a825;
+    }
+    
+    .book-list {
+      margin: 20px;
+      width: 100%;
+    }
+    
+    .book {
+      border: 1px solid #000000;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color:   #000000;
+      border-radius: 15px;
+
+    }
+    
+    .book-title {
+      font-weight: bold;
+      color: #ffffff;
+    }
+    
+    .book-author {
+      color: #ffffff;
+      margin-bottom: 5px;
+    }
+    
+    .book-numAvailableCopies {
+      color: #ffffff;
+      margin-bottom: 5px;
+    }
+    
+    .book-details {
+      font-style: italic;
+      color: #ffffff;
+      margin-bottom: 5px;
+    }
+    
+    .book-num {
+      font-style: italic;
+      color: #888;
+      margin-bottom: 5px;
+    }
+    
+    .availability {
+      font-weight: bold;
+      color: green;
+    }
+    
+    .unavailability {
+      font-weight: bold;
+      color: red;
+    }
+    
+    .loading {
+      text-align: center;
+      font-style: italic;
+    }
+    
+    .error {
+      color: red;
+    }
+    
+    .search-bar {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+    
+    .search-input {
+      padding: 5px;
+      flex-grow: 1;
+      margin-right: 10px;
+      outline: none;
+      width: 500px;
+      height: 25px;
+      border: solid;
+      border-radius: 5px;
+      border-width: 0;
+      background-color:  #000000;
+      color: rgb(255, 255, 255);
+    }
+    
+    .search-button {
+      padding: 5px 10px;
+      background-color: #252525;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .filter-bar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 10px;
+    }
+    
+    .filter-select {
+      padding: 5px;
+      margin-right: 10px;
+    }
+    
+    .filter-button {
+      padding: 5px 10px;
+      background-color: #252525;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .count {
+      font-style: italic;
+      color: #888;
+      margin-top: 5px;
+    }
+    
+    .suggestion-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      position: absolute;
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      z-index: 1;
+    }
+    
+    .suggestion-item {
+      cursor: pointer;
+      padding: 5px;
+    }
+    
+    .suggestion-item:hover {
+      background-color: #ddd;
+    }
+  </style>
+</head>
+<body>
+  <div class="book-list">
+    <h1>Harry Potter Library - Book List</h1>
+    <div class="search-bar">
+      <div style="position: relative;">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search books...">
+        <ul id="suggestionList" class="suggestion-list"></ul>
+      </div>
+      <button id="searchButton" class="search-button">Search</button>
+    </div>
+    <div class="filter-bar">
+      <select id="filterSelect" class="filter-select">
+        <option value="">Sort by</option>
+        <option value="title">Title</option>
+        <option value="author">Author</option>
+        <option value="subject">Subject</option>
+        <option value="publish-date">Publish Date</option>
+      </select>
+      <button id="filterButton" class="filter-button">Filter</button>
+    </div>
+    <div id="count" class="count"></div>
+    <div id="books"></div>
+    <div id="loading" class="loading">Loading...</div>
+    <div id="error" class="error"></div>
+  </div>
+
+  <script>
+    let page = 1;
+    let isLoading = false;
+    let hasMore = true;
+    let searchQuery = ''; // Variable to store the current search query
+    let filter = ''; // Variable to store the current filter option
+
+    function getBooks() {
+      if (isLoading || !hasMore) return;
+      isLoading = true;
+
+      const url = `/api/books?page=${page}&search=${encodeURIComponent(searchQuery)}&filter=${filter}`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          displayBooks(data.books);
+          displayCount(data.count);
+          page++;
+          hasMore = data.hasMore;
+          isLoading = false;
+        })
+        .catch(error => {
+          displayError('Error fetching books. Please try again.');
+          isLoading = false;
+        });
+    }
+
+    function displayBooks(books) {
+      const booksContainer = document.getElementById('books');
+      const loadingElement = document.getElementById('loading');
+
+      booksContainer.innerHTML = ''; // Clear previous books
+
+      books.forEach(book => {
+        const bookElement = document.createElement('div');
+        bookElement.className = 'book';
+
+        const titleElement = document.createElement('div');
+        titleElement.className = 'book-title';
+        titleElement.textContent = book.title;
+
+        const authorElement = document.createElement('div');
+        authorElement.className = 'book-author';
+        authorElement.textContent = `Author: ${book.author}`;
+
+        const detailsElement = document.createElement('div');
+        detailsElement.className = 'book-details';
+        detailsElement.textContent = `Genre: ${book.genre}, Year: ${book.year}`;
+
+        const availabilityElement = document.createElement('div');
+        availabilityElement.className = book.availabilityStatus === 'Available' ? 'availability' : 'unavailability';
+        availabilityElement.textContent = `Availability: ${book.availabilityStatus}`;
+
+        const numAvailableCopiesElement = document.createElement('div');
+        numAvailableCopiesElement.className = 'book-numAvailableCopies';
+        numAvailableCopiesElement.textContent = `Available Copies: ${book.numAvailableCopies}`;
+
+        bookElement.appendChild(titleElement);
+        bookElement.appendChild(authorElement);
+        bookElement.appendChild(detailsElement);
+        bookElement.appendChild(availabilityElement);
+        bookElement.appendChild(numAvailableCopiesElement);
+        booksContainer.appendChild(bookElement);
+      });
+
+      loadingElement.style.display = 'none';
+    }
+
+    function displayCount(count) {
+      const countElement = document.getElementById('count');
+      countElement.textContent = `Count: ${count} books`;
+    }
+
+    function displayError(message) {
+      const errorElement = document.getElementById('error');
+      errorElement.textContent = message;
+    }
+
+    function handleScroll() {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+
+      if (scrollTop + windowHeight >= documentHeight - 200) {
+        getBooks();
+      }
+    }
+
+    function searchBooks() {
+      const searchInput = document.getElementById('searchInput');
+      searchQuery = searchInput.value.trim();
+      page = 1; // Reset page number
+      hasMore = true; // Reset hasMore flag
+      getBooks();
+    }
+
+    function filterBooks() {
+      const filterSelect = document.getElementById('filterSelect');
+      filter = filterSelect.value;
+      page = 1; // Reset page number
+      hasMore = true; // Reset hasMore flag
+      getBooks();
+    }
+
+    function handleInput() {
+      const searchInput = document.getElementById('searchInput');
+      const searchQuery = searchInput.value.trim();
+
+      // Display suggestions based on search query
+      displaySuggestions(searchQuery);
+    }
+
+    function displaySuggestions(searchQuery) {
+      const suggestionList = document.getElementById('suggestionList');
+      suggestionList.innerHTML = ''; // Clear previous suggestions
+
+      if (searchQuery === '') return;
+
+      const url = `/api/books?page=1&search=${encodeURIComponent(searchQuery)}`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          data.suggestions.forEach(suggestion => {
+            const suggestionItem = document.createElement('li');
+            suggestionItem.className = 'suggestion-item';
+            suggestionItem.textContent = suggestion;
+
+            suggestionItem.addEventListener('click', () => {
+              document.getElementById('searchInput').value = suggestion;
+              searchBooks();
+            });
+
+            suggestionList.appendChild(suggestionItem);
+          });
+
+          if (data.suggestions.length === 0) {
+            const suggestionItem = document.createElement('li');
+            suggestionItem.className = 'suggestion-item';
+            suggestionItem.textContent = 'No suggestions found';
+
+            suggestionList.appendChild(suggestionItem);
+          }
+        })
+        .catch(error => {
+          console.log('Error fetching suggestions:', error);
+        });
+    }
+
+    window.addEventListener('scroll', handleScroll);
+
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', handleInput);
+
+    const searchButton = document.getElementById('searchButton');
+    searchButton.addEventListener('click', searchBooks);
+
+    const filterButton = document.getElementById('filterButton');
+    filterButton.addEventListener('click', filterBooks);
+
+    searchInput.addEventListener('keypress', event => {
+      if (event.key === 'Enter') {
+        searchBooks();
+      }
+    });
+
+    // Initial load
+    getBooks();
+  </script>
+</body>
+</html>

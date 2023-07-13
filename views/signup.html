@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Library Management System - Signup</title>
+  <style>
+   body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9a825;
+    }
+    
+    .signup-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    
+    .signup-form {
+      width: 400px;
+      padding: 40px;
+      background-color: #fcfcfc;
+      border-radius: 25px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .title {
+      font-size: 24px;
+      color: #1D2D50;
+      margin-bottom: 20px;
+      text-align: center;
+      font-family: Arial, Helvetica, sans-serif;
+      text-transform: uppercase;
+    }
+    
+    .input-group {
+      margin-bottom: 20px;
+    }
+    
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+      color: #555;
+    }
+    
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ff9101;
+      border-radius: 4px;
+      box-sizing: border-box; /* Include padding and border in width calculation */
+    }
+    
+    .cta-button {
+      padding: 10px 20px;
+      background-color: #252525;
+      color: #ffffff;
+      font-size: 18px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      width: 100%;
+    }
+    
+    .cta-button:hover {
+      background-color: #f9a825;
+    }
+    
+   
+
+
+
+
+  </style>
+</head>
+<body>
+  <div class="signup-container">
+    <form class="signup-form" action="/signup" method="POST">
+      <h1 class="title">Signup</h1>
+      <div class="input-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" required name="username">
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required name="password">
+      </div>
+      <div class="input-group">
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" id="confirm-password" required name="confirmPassword">
+      </div>
+      <button class="cta-button" type="submit">Sign Up</button>
+    </form>
+  </div>
+</body>
+</html>

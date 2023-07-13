@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Harry Potter Library</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #252525;
+      color: #fff;
+    }
+    
+    .loading-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #252525;
+    }
+    
+    .loading-animation {
+      width: 80px;
+      height: 80px;
+      border: 8px solid #fff;
+      border-top: 8px solid #f9a825;
+      border-radius: 50%;
+      animation: spin 1.5s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .landing-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-image: url('hplibrary.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .logo {
+      width: 200px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+    
+    .title {
+      font-size: 48px;
+      color: #f9a825;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    .subtitle {
+      font-size: 24px;
+      color: #fff;
+      margin-bottom: 40px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    .cta-button {
+      padding: 10px 20px;
+      background-color: #f9a825;
+      color: #fff;
+      font-size: 18px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+    
+    .cta-button:hover {
+      background-color: #c17900;
+    }
+  </style>
+</head>
+<body>
+  <div class="loading-container">
+    <div class="loading-animation"></div>
+  </div>
+
+  <div class="landing-page" style="display: none;">
+ <!--   <img src="hplibrary.jpg" alt="Harry Potter Library Logo" class="logo"> */ -->
+    <h1 class="title">Welcome to the Harry Potter Library</h1>
+    <h2 class="subtitle">Explore the magical world of Harry Potter books.</h2>
+    <button class="cta-button">Alohomora</button>
+  </div>
+
+  <script>
+    window.addEventListener('load', function() {
+      const loadingContainer = document.querySelector('.loading-container');
+      const landingPage = document.querySelector('.landing-page');
+      const getStartedButton = document.querySelector('.cta-button');
+  
+      setTimeout(function() {
+        loadingContainer.style.display = 'none';
+        landingPage.style.display = 'flex';
+      }, 2000); // Adjust the duration as needed
+  
+      getStartedButton.addEventListener('click', function() {
+        window.location.href = 'login.html';
+      });
+    });
+  </script>
+  
+</body>
+</html>

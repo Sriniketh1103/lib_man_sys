@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Library Management System - Login</title>
+  <style>
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-form {
+  width: 400px;
+  padding: 40px;
+  background-color: #fcfcfc;
+  border-radius: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 24px;
+  color: #1D2D50;
+  margin-bottom: 20px;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  text-transform: uppercase;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #555;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #f9a825;
+  border-radius: 4px;
+}
+
+.cta-button {
+  padding: 10px 20px;
+  background-color:#252525;
+  color: #ffffff;
+  font-size: 18px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+.cta-button:hover {
+  background-color: #f3900f;
+}
+
+a {
+  color: #1D2D50;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #0B1C36;
+}
+body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9a825;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <form class="login-form" action="/login" method="POST">
+
+      <h1 class="title">Login</h1>
+      <div class="input-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" required name="username">
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required name="password">
+      </div>
+      <button class="cta-button" type="submit">Log In</button>
+      <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+    </form>
+  </div>
+</body>
+</html>
